@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Santa Claus | Chief Happiness Officer</title>
+
+<style>
+:root {
+  --primary: #c1121f;     /* Santa Red */
+  --dark-red: #8b0f17;
+  --bg: #a11d1d;          /* soft red-white background */
+  --text: #1a1a1a;
+  --card: #ffffff;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Cursor Glow */
+.cursor-glow {
+  position: fixed;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 60%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+/* Snow Canvas */
+#snow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+section {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+
+h1, h2 {
+  margin-bottom: 1rem;
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 500px;
+  margin: auto;
+}
+
+#typing-text {
+  color: #28a745;
+  font-weight: 700;
+  text-shadow: 0 0 8px #000000, 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-img img {
+    width: 100%;
+  max-width: 800px;   /* 👈 controls how big Santa is */
+  height: auto;
+  border-radius: 100%;
+  border: dotted 20px rgb(191, 184, 184);
+}
+
+/* Button */
+button {
+  padding: 0.8rem 1.8rem;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #28a745, #1e7e34); /* Green gradient */
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6); /* green glow on hover */
+}
+
+/* Dashboard */
+#dashboard {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: 0 15px 35px rgba(193, 18, 31, 0.15); /* red glow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(40, 167, 69, 0.35); /* green glow on hover */
+}
+#skills button {
+  background: #28a745;
+  color: #fff;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#skills button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+
+/* Responsive */
+@media (min-width: 768px) {
+  #hero {
+    grid-template-columns: 1fr 1fr;
+    text-align: left;
+  }
+
+  #dashboard {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+    margin: auto;
+  }
+}
+.toy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: auto;
+}
+body.naughty {
+  background: #000000;
+  color: #ff4c4c;
+}
+body.naughty button {
+  background: #ff4c4c;
+  color: white;
+}
+#delivery-map {
+  background:linear-gradient(135deg, #e6e4e4, #cc1b1b);
+  color: white;
+  text-align: center;
+}
+
+.subtitle {
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.map-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+@media (min-width: 768px) {
+  .map-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+#worldMap {
+  width: 100%;
+  max-width: 500px;
+}
+
+.map-region {
+  fill: #ffcccc;
+  stroke: #fff;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.map-region:hover {
+  fill: #28a745;
+  transform: scale(1.03);
+}
+
+.info-panel {
+  background: white;
+  color: #b11226;
+  padding: 1.5rem;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.info-panel h3 {
+  margin-bottom: 0.5rem;
+  color: #28a745;
+}
+
+#toy-factory {
+  background: linear-gradient(135deg, #b11226, #e2d1d1);
+  color: white;
+  text-align: center;
+}
+
+.factory-box {
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .factory-box {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.conveyor {
+  background: #222;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+  width: 100%;
+  max-width: 400px;
+}
+
+.toy {
+  font-size: 2rem;
+  animation: moveToy 2s linear infinite;
+}
+
+@keyframes moveToy {
+  0% { transform: translateX(-20px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(320px); opacity: 0; }
+}
+
+.factory-controls {
+  text-align: left;
+}
+
+.factory-controls button {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#startFactory {
+  background: #28a745;
+  color: white;
+}
+
+#stopFactory {
+  background: #ffc107;
+  color: #222;
+}
+
+.resume-btn-container {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#downloadResume {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #28a745, #1e7e34); /* green festive */
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#downloadResume:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6);
+}
+
+#about-me {
+  background: #fff0f0;
+  text-align: center;
+}
+
+.about-box {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.about-text {
+  min-height: 120px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+.about-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.about-actions button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: #b11226;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.about-actions button:hover {
+  background: #28a745;
+  transform: translateY(-2px);
+}
+
+#letter-analyzer {
+  background: linear-gradient(135deg, #fff, #ffe6e6);
+  text-align: center;
+}
+
+.letter-box {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+#letterInput {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  resize: none;
+  font-size: 1rem;
+}
+
+#analyzeBtn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 20px;
+  border: none;
+  background: #b11226;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.analysis-result {
+  margin-top: 1.5rem;
+  text-align: left;
+  display: none;
+}
+
+.analysis-result span {
+  font-weight: 700;
+}
+
+
+
+
+
+
+</style>
+</head>
+
+<body>
+
+<!-- Snow -->
+<canvas id="snow"></canvas>
+
+<!-- Cursor Glow -->
+<div class="cursor-glow"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <h1 id="typing-text"></h1>
+    <p>Delivering joy worldwide since 1024 AD</p>
+    <button onclick="scrollToSection('about')">Explore Portfolio</button>
+    <a href="resume_.pdf" download>
+      <button id="downloadResume">📄 Download Resume</button>
+    </a>
+  </div>
+
+
+  
+
+  <div class="hero-img">
+    <!-- Replace with your Santa image -->
+    <img src="images/santa.png" alt="Santa Claus">
+  </div>
+
+
+</section>
+
+<section id="about-me">
+  <h2 id="about">🎅 About Me</h2>
+
+  <div class="about-box">
+    <div class="about-text">
+      <p id="aboutContent">
+        Hello! I’m Santa Claus. For over a thousand years, I’ve been managing
+        one of the world’s largest global delivery operations — reaching
+        millions of homes in a single night.
+      </p>
+    </div>
+
+    <div class="about-actions">
+      <button onclick="showAbout('story')">My Story</button>
+      <button onclick="showAbout('work')">What I Do</button>
+      <button onclick="showAbout('values')">How I Work</button>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <div class="card" data-target="1234567">🎁 <span>0</span><br>Gifts Delivered</div>
+  <div class="card" data-target="195">🌍 <span>0</span><br>Countries Covered</div>
+  <div class="card" data-target="99">😊 <span>0</span><br>Happiness %</div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <h2>Experience Timeline</h2>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2>Core Skills</h2>
+</section>
+
+<section id="delivery-map">
+  <h2>🌍 Global Gift Delivery Network</h2>
+  <p class="subtitle">Click a region to see delivery status</p>
+
+  <div class="map-container">
+    <!-- SIMPLE WORLD SVG -->
+    <svg viewBox="0 0 800 400" id="worldMap">
+
+      <!-- North America -->
+      <path id="northAmerica"
+        d="M80 120 L200 80 L250 150 L180 200 L100 180 Z"
+        class="map-region" />
+
+      <!-- Europe -->
+      <path id="europe"
+        d="M380 100 L430 90 L460 120 L420 150 L380 130 Z"
+        class="map-region" />
+
+      <!-- Asia -->
+      <path id="asia"
+        d="M470 120 L620 100 L700 180 L600 220 L480 180 Z"
+        class="map-region" />
+
+      <!-- Africa -->
+      <path id="africa"
+        d="M380 170 L440 180 L420 260 L360 240 Z"
+        class="map-region" />
+
+    </svg>
+
+    <div class="info-panel">
+      <h3 id="regionName">Select a region</h3>
+      <p id="deliveryInfo">Awaiting selection…</p>
+      <p id="giftCount">🎁 Gifts: —</p>
+    </div>
+  </div>
+</section>
+<br>
+<br>
+
+<section id="toy-factory">
+  <h2>🏭 Santa’s Toy Factory</h2>
+  <p class="subtitle">Live production system powered by elves</p>
+
+  <div class="factory-box">
+    <div class="conveyor">
+      <div class="toy">🧸</div>
+      <div class="toy">🚗</div>
+      <div class="toy">🪀</div>
+    </div>
+
+    <div class="factory-controls">
+      <div class="stats">
+        <p>🎁 Toys Produced: <span id="toyCount">0</span></p>
+        <p>📦 Inventory Ready: <span id="inventoryCount">0</span></p>
+      </div>
+
+      <button id="startFactory">▶ Start Factory</button>
+      <button id="stopFactory">⏸ Stop Factory</button>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<script>
+/* Typing Effect */
+const text = "Santa Claus — Chief Happiness Officer";
+let i = 0;
+const typingEl = document.getElementById("typing-text");
+
+(function type() {
+  if (i < text.length) {
+    typingEl.textContent += text.charAt(i++);
+    setTimeout(type, 80);
+  }
+})();
+
+/* Scroll */
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+/* Counters */
+const cards = document.querySelectorAll(".card");
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const span = entry.target.querySelector("span");
+      const target = +entry.target.dataset.target;
+      let count = 0;
+      const step = target / 100;
+
+      const interval = setInterval(() => {
+        count += step;
+        span.textContent = Math.floor(count);
+        if (count >= target) clearInterval(interval);
+      }, 20);
+    }
+  });
+});
+cards.forEach(card => observer.observe(card));
+
+/* Timeline */
+const timelineData = [
+  { year: "1024", text: "Handcrafted toys in the North Pole." },
+  { year: "1900", text: "Scaled global logistics with reindeer." },
+  { year: "2024", text: "AI-powered Naughty/Nice system." }
+];
+
+const timeline = document.getElementById("timeline");
+timelineData.forEach(item => {
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `<h3>${item.year}</h3><p>${item.text}</p>`;
+  timeline.appendChild(div);
+});
+
+/* Skills */
+const skillsData = [
+  "Global Logistics",
+  "Toy Craftsmanship",
+  "Time Management",
+  "Elf Leadership",
+  "Customer Happiness"
+];
+
+const skills = document.getElementById("skills");
+skillsData.forEach(skill => {
+  const btn = document.createElement("button");
+  btn.textContent = skill;
+  skills.appendChild(btn);
+});
+
+/* ❄️ Snow Animation */
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+let w, h, flakes = [];
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+for (let i = 0; i < 100; i++) {
+  flakes.push({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 3 + 1,
+    d: Math.random() + 1
+  });
+}
+
+function snow() {
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+
+  flakes.forEach(f => {
+    ctx.moveTo(f.x, f.y);
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+  });
+
+  ctx.fill();
+  flakes.forEach(f => {
+    f.y += f.d;
+    if (f.y > h) {
+      f.y = 0;
+      f.x = Math.random() * w;
+    }
+  });
+  requestAnimationFrame(snow);
+}
+snow();
+
+/* 🎅 Cursor Glow */
+const glow = document.querySelector(".cursor-glow");
+document.addEventListener("mousemove", e => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
+const toys = [
+  { name: "Wooden Train", year: "1024", img: "images/train.png" },
+  { name: "Dollhouse", year: "1050", img: "images/dollhouse.png" },
+  { name: "AI Robot", year: "2024", img: "images/robot.png" }
+];
+
+const toySection = document.createElement("section");
+toySection.id = "toys";
+toySection.innerHTML = `<h2>Masterpieces</h2><div class="toy-grid"></div>`;
+document.body.appendChild(toySection);
+
+const grid = toySection.querySelector(".toy-grid");
+toys.forEach(toy => {
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `<img src="${toy.img}" alt="${toy.name}" style="width:100%; border-radius:10px;"><h4>${toy.name}</h4><p>${toy.year}</p>`;
+  grid.appendChild(div);
+});
+
+const toggleBtn = document.createElement("button");
+toggleBtn.textContent = "Toggle Naughty / Nice";
+toggleBtn.style.margin = "2rem";
+document.body.appendChild(toggleBtn);
+
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("naughty");
+});
+const testimonials = [
+  { name: "Timmy, USA", msg: "Santa delivered my dream bike!" },
+  { name: "Anna, Germany", msg: "Loved my dollhouse from Santa!" },
+];
+
+const testSection = document.createElement("section");
+testSection.id = "testimonials";
+testSection.innerHTML = `<h2>Testimonials</h2><div id="testimonial-card" class="card"></div>`;
+document.body.appendChild(testSection);
+
+let index = 0;
+const tCard = document.getElementById("testimonial-card");
+function showTestimonial() {
+  const t = testimonials[index];
+  tCard.innerHTML = `<p>"${t.msg}"</p><h4>- ${t.name}</h4>`;
+  index = (index + 1) % testimonials.length;
+}
+showTestimonial();
+setInterval(showTestimonial, 4000);
+
+const regions = {
+  northAmerica: {
+    name: "North America",
+    status: "Deliveries in progress 🎅",
+    gifts: "12,450,000"
+  },
+  europe: {
+    name: "Europe",
+    status: "All cities covered ✅",
+    gifts: "18,200,000"
+  },
+  asia: {
+    name: "Asia",
+    status: "High-density delivery zone 🚀",
+    gifts: "25,800,000"
+  },
+  africa: {
+    name: "Africa",
+    status: "Remote areas optimized 🌍",
+    gifts: "9,600,000"
+  }
+};
+
+const regionName = document.getElementById("regionName");
+const deliveryInfo = document.getElementById("deliveryInfo");
+const giftCount = document.getElementById("giftCount");
+
+document.querySelectorAll(".map-region").forEach(region => {
+  region.addEventListener("click", () => {
+    const data = regions[region.id];
+
+    regionName.textContent = data.name;
+    deliveryInfo.textContent = data.status;
+    giftCount.textContent = "🎁 Gifts: " + data.gifts;
+  });
+});
+
+let toyInterval = null;
+let produced = 0;
+let inventory = 0;
+
+const toyCount = document.getElementById("toyCount");
+const inventoryCount = document.getElementById("inventoryCount");
+const startBtn = document.getElementById("startFactory");
+const stopBtn = document.getElementById("stopFactory");
+
+startBtn.addEventListener("click", () => {
+  if (toyInterval) return;
+
+  toyInterval = setInterval(() => {
+    produced += Math.floor(Math.random() * 5) + 1;
+    inventory += 1;
+
+    toyCount.textContent = produced;
+    inventoryCount.textContent = inventory;
+  }, 800);
+});
+
+stopBtn.addEventListener("click", () => {
+  clearInterval(toyInterval);
+  toyInterval = null;
+});
+
+function showAbout(type) {
+  const content = {
+    story: `Hello! I’m Santa Claus. For over a thousand years, I’ve been
+    delivering joy across the globe. What began as a small tradition
+    grew into a worldwide operation built on trust, consistency,
+    and belief.`,
+
+    work: `I lead a large-scale seasonal operation that includes
+    production planning, global logistics, route optimization,
+    and real-time delivery tracking — all completed in a single night.`,
+
+    values: `I believe in preparation, reliability, and kindness.
+    Every system I run is built to scale, adapt to change,
+    and deliver happiness on time — every time.`
+  };
+
+  document.getElementById("aboutContent").textContent = content[type];
+}
+
+document.getElementById("analyzeBtn").addEventListener("click", () => {
+  const text = document.getElementById("letterInput").value.toLowerCase();
+
+  if (!text.trim()) return;
+
+  let score = 50;
+
+  if (text.includes("please")) score += 10;
+  if (text.includes("thank")) score += 10;
+  if (text.includes("sorry")) score += 10;
+  if (text.includes("promise")) score += 5;
+  if (text.length > 100) score += 10;
+
+  score = Math.min(score, 100);
+
+  let status = score > 70 ? "Nice 😊" : "Needs Improvement 😐";
+  let priority = score > 85 ? "High" : score > 60 ? "Medium" : "Low";
+
+  document.getElementById("statusText").textContent = status;
+  document.getElementById("scoreText").textContent = score + "/100";
+  document.getElementById("priorityText").textContent = priority;
+
+  document.getElementById("analysisResult").style.display = "block";
+});
+
+
+
+
+
+
+
+
+</script>
+
+<section id="letter-analyzer">
+  <h2>✉️ Letter Intelligence Analyzer</h2>
+  <p class="subtitle">
+    A simulated system that evaluates incoming letters using behavioral signals.
+  </p>
+
+  <div class="letter-box">
+    <textarea id="letterInput" placeholder="Write your letter to Santa..."></textarea>
+
+    <button id="analyzeBtn">Analyze Letter</button>
+
+    <div class="analysis-result" id="analysisResult">
+      <p>🎯 Status: <span id="statusText">—</span></p>
+      <p>⭐ Niceness Score: <span id="scoreText">—</span></p>
+      <p>🎁 Gift Priority: <span id="priorityText">—</span></p>
+    </div>
+  </div>
+</section>
+
+
+<section id="contact">
+  <h2>Hire Santa</h2>
+  <p>Email: northpole@santa.com</p>
+  <button onclick="alert('Santa will contact you soon!!')">Send a Letter</button>
+</section>
+
+
+</body>
+</html>
